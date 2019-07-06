@@ -35,5 +35,8 @@ format:
 	clang-format -i $(SRC_DIR)/*.c $(SRC_DIR)/*.h
 	clang-format -i $(TST_DIR)/*.c
 
-fresh: clean format all
+fresh: clean format all test
 
+# TODO: clean up this target eventually
+test:
+	 gcc tst/test_chip8.c src/chip8.c -o bin/tst/chip8 && ./bin/tst/chip8

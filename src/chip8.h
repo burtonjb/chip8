@@ -11,6 +11,13 @@ typedef struct {
   memory memory[MAX_MEMORY];
   memory reg[REGISTERS];
   stack stack[STACK_SIZE];
+
+  timer delayTimer;
+  timer soundTimer;
+
+  memory graphics[GRAPHICS_WIDTH * GRAPHICS_HEIGHT];
+  memory key[KEYS];
+  bool drawFlag;
 } Chip8;
 
 Chip8 *initChip8(); // Constructor
