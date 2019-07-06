@@ -22,7 +22,7 @@ LDLIBS += -lm
 all: $(EXE)
 
 $(EXE): $(OBJ)
-	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $(OUTPUT_DIR)/$@
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $(OUTPUT_DIR)/$@ -Iinclude -lpthread -Llib -lSDL2 -lSDL2main
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
@@ -31,7 +31,7 @@ clean:
 	$(RM) $(OBJ)
 	$(RM) $(OUTPUT_DIR)/$(EXE)
 
-format:  
+format:
 	clang-format -i $(SRC_DIR)/*.c $(SRC_DIR)/*.h
 	clang-format -i $(TST_DIR)/*.c
 
@@ -39,4 +39,4 @@ fresh: clean format all test
 
 # TODO: clean up this target eventually
 test:
-	 gcc tst/test_chip8.c src/chip8.c -o bin/tst/chip8 && ./bin/tst/chip8
+	 gcc -std=c11 tst/test_chip8.c src/chip8.c -o bin/tst/chip8 && ./bin/tst/chip8

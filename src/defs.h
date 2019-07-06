@@ -12,6 +12,8 @@
 #define GRAPHICS_WIDTH 64
 #define GRAPHICS_HEIGHT 32
 
+#define SLEEP_TIME_MS 16 //Refresh at 60 times/second
+
 #define MEM_START 0x00
 #define INTERPRETER_END 0x1FF
 #define GRAPHICS_START 0x050
@@ -20,11 +22,13 @@
 #define PROGRAM_END 0xFFF
 
 #define FONT_SIZE 80
+#define FONT_OFFSET 0
 
 typedef unsigned short opcode;
 typedef unsigned short counter;
 typedef unsigned short stack;
 typedef unsigned char memory;
 typedef unsigned short timer;
+typedef unsigned char key;
 
 #endif // DEF_H

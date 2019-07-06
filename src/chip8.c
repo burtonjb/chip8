@@ -42,7 +42,7 @@ Chip8 *initChip8() {
   out->drawFlag = false;
 
   for (int i = 0; i < FONT_SIZE; i++) {
-    out->memory[i] =
+    out->memory[i + FONT_OFFSET] =
         chip8_fontset[i]; // TODO: should the be an offset for the memory
                           // location the fonts are loaded into?
   }
@@ -74,15 +74,16 @@ void emulateCycle(Chip8 *chip8) {
       chip8->programCounter = chip8->stack[--chip8->stackPointer];
       chip8->programCounter += 2;
     }
-    if (oc == 0x00E0) { // (0x00E0) Clear the display
+    else if (oc == 0x00E0) { // (0x00E0) Clear the display
       for (int i = 0; i < GRAPHICS_WIDTH * GRAPHICS_HEIGHT; i++) {
         chip8->graphics[i] = 0;
       }
       chip8->drawFlag = true;
       chip8->programCounter += 2;
-    } else { // (0x0NNN) Call RCA 1802 at NNN. Not needed for most ROMs
+    } else { // (0x0NNN) Call RCA 1802 at NNN. Not needed for most ROMs, so just going to error out
       print(chip8, false, false, false);
-      printf("Unknown opcode %x \n", oc);
+      printf("Unknown opcode %.4x \n", oc);
+      exit(1);
     }
     break;
   case 0x1000: // (0x1NNN) goto location NNN
@@ -159,7 +160,8 @@ void emulateCycle(Chip8 *chip8) {
       chip8->reg[(oc & 0x0F00) >> 8] <<= 1;
     } else {
       print(chip8, false, false, false);
-      printf("Unknown opcode %x \n", oc);
+      printf("Unknown opcode %.4x \n", oc);
+      exit(1);
     }
     chip8->programCounter += 2;
     break;
@@ -203,6 +205,7 @@ void emulateCycle(Chip8 *chip8) {
         }
       }
     }
+    chip8->drawFlag = true;
     chip8->programCounter += 2;
     break;
   case 0xE000:
@@ -217,7 +220,8 @@ void emulateCycle(Chip8 *chip8) {
       }
     } else {
       print(chip8, false, false, false);
-      printf("Unknown opcode %x \n", oc);
+      printf("Unknown opcode %.4x \n", oc);
+      exit(1);
     }
     chip8->programCounter += 2;
     break;
@@ -285,7 +289,8 @@ void emulateCycle(Chip8 *chip8) {
     break;
   default: // unknown op code
     print(chip8, false, false, false);
-    printf("Unknown opcode %x \n", oc);
+    printf("Unknown opcode %.4x \n", oc);
+    exit(1);
   }
 
   // update timers
@@ -301,11 +306,11 @@ void emulateCycle(Chip8 *chip8) {
 }
 
 void print(Chip8 *chip8, bool printMem, bool printReg, bool printStack) {
-  printf("ProgramCounter: %x\n", chip8->programCounter);
-  printf("IndexCounter: %x\n", chip8->indexCounter);
-  printf("Current opcode: %x\n", chip8->memory[chip8->programCounter] << 8 |
+  printf("ProgramCounter: %.4X\n", chip8->programCounter);
+  printf("IndexCounter: %.4X\n", chip8->indexCounter);
+  printf("Current opcode: %.4X\n", chip8->memory[chip8->programCounter] << 8 |
                                      chip8->memory[chip8->programCounter + 1]);
-  printf("Stackpointer: %d\n", chip8->stackPointer);
+  printf("Stackpointer: %.4X\n", chip8->stackPointer);
 
   if (printMem) {
     for (int i = 0; i < PROGRAM_END; i++) {

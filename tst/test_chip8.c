@@ -33,6 +33,7 @@ void testClearScreen() {
   emulateCycle(toTest);
   assert(toTest->programCounter == 0x0202);
   assert(toTest->graphics[7] == 0);
+  assert(toTest->drawFlag == true);
 }
 
 void testJump() {

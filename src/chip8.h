@@ -16,7 +16,7 @@ typedef struct {
   timer soundTimer;
 
   memory graphics[GRAPHICS_WIDTH * GRAPHICS_HEIGHT];
-  memory key[KEYS];
+  key key[KEYS];
   bool drawFlag;
 } Chip8;
 
