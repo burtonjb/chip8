@@ -198,7 +198,7 @@ void emulateCycle(Chip8 *chip8) {
       pixel = chip8->memory[chip8->indexCounter + yline];
       for (int xline = 0; xline < 8; xline++) {
         if ((pixel & (0x80 >> xline)) != 0) {
-          if (chip8->graphics[(x + xline + ((y + yline) * 64))] == 1) {
+          if (chip8->graphics[( (x + xline) % GRAPHICS_WIDTH + (((y + yline) % GRAPHICS_HEIGHT) * 64))] == 1) {
             chip8->reg[0xf] = 1;
           }
           chip8->graphics[x + xline + ((y + yline) * 64)] ^= 1;
