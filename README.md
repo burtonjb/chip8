@@ -15,7 +15,7 @@ Most Chip-8 programs start at location 0x200 (512), but some begin at 0x600 (153
 
 Chip-8 has 16 general purpose 8-bit registers, usually referred to as Vx, where x is a hexadecimal digit (0 through F). There is also a 16-bit register called I. This register is generally used to store memory addresses, so only the lowest (rightmost) 12 bits are usually used.
 
-The VF register should not be used by any program, as it is used as a flag by some instructions. See section 3.0, Instructions for details.
+The VF register should not be used by any program, as it is used as a flag by some instructions. 
 
 The computers which originally used the Chip-8 Language had a 16-key hexadecimal keypad with the following layout:
 
