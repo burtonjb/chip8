@@ -1,10 +1,3 @@
-# TODO
-1. Finish unit tests
-1. download more roms (DONE)
-1. clean up opcode code
-1. check 0xD000 opcode code (DONE)
-1. finish documentation (DONE)
-
 # overview of chip8
 CHIP-8 is an interpreted programming language used in the mid-1970s. There are many classic video games ported to the chip-8 interpreter.
 
