@@ -16,6 +16,7 @@ SKIP_IF_REG_X_EQ_REG_Y = "BRE"
 def format_output(op_code):
     return "{}".format(op_code.to_bytes(2, byteorder="big").hex())
 
+
 # returns the op-code for the assembly instruction and args
 def encode_op_code(instruction, args):
     if instruction == CALL_MACHINE_CODE:
@@ -41,23 +42,23 @@ def main():
     with open(sys.argv[1], "rw") as f:
         line = "placeholder"
         while line:
-            line = f.readline().split('\t')
-            nemonic, args = line[0], line[1:]
-            print(format_output(op_code, nemonic, args))
+            line = f.readline().split("\t")
+            mnenomic, args = line[0], line[1:]
+            print(format_output(op_code, mnenomic, args))
             # handle end-of-file, output total size or something
 
 
 def test_encoding():
     instructions = [
-            ("CMC", [0x222]), 
-            ("CLS", []),
-            ("RTN", []),
-            ("JMP", [0x123]),
-            ("CSR", [0x234]),
-            ("BEQ", [0xA, 0xFF]),
-            ("BNE", [0xB, 0xFE]),
-            ("BRE", [0x1, 0x2])
-            ]
+        ("CMC", [0x222]),
+        ("CLS", []),
+        ("RTN", []),
+        ("JMP", [0x123]),
+        ("CSR", [0x234]),
+        ("BEQ", [0xA, 0xFF]),
+        ("BNE", [0xB, 0xFE]),
+        ("BRE", [0x1, 0x2]),
+    ]
     for inst, args in instructions:
         print(format_output(encode_op_code(inst, args)))
 
