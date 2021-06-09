@@ -20,13 +20,13 @@ key keyMap[KEYS] = {
 void loadRom(Chip8 *chip8, int argc, char **argv) {
   if (argc != 2) {
     printf("1st argument must be path to rom\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   FILE *fp;
   fp = fopen(argv[1], "rb");
   if (fp == NULL) {
     printf("Failed to open rom: %s\n", argv[1]);
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   fseek(fp, 0, SEEK_END);
   long romSize = ftell(fp);
@@ -35,13 +35,13 @@ void loadRom(Chip8 *chip8, int argc, char **argv) {
   unsigned char *romBuffer = (unsigned char *)malloc(sizeof(unsigned char) * romSize);
   if (romBuffer == NULL) {
     printf("Failed to allocate memory for ROM\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   unsigned int result =
       fread(romBuffer, sizeof(char), (unsigned int)romSize, fp);
   if (result != romSize) {
     printf("Failed to read ROM\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   if (romSize < PROGRAM_END - PROGRAM_START) {
     for (int i = 0; i < romSize; ++i) {
@@ -49,7 +49,7 @@ void loadRom(Chip8 *chip8, int argc, char **argv) {
     }
   } else {
     printf("ROM too large to fit in memory\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   fclose(fp);
   free(romBuffer);
@@ -79,7 +79,6 @@ int main(int argc, char **argv) {
 
   while (true) {
     emulateCycle(chip8);
-    // print(chip8, false, false, false);
 
     SDL_Event e;
     while (SDL_PollEvent(&e)) {

@@ -43,8 +43,7 @@ Chip8 *initChip8() {
 
   for (int i = 0; i < FONT_SIZE; i++) {
     out->memory[i + FONT_OFFSET] =
-        chip8_fontset[i]; // TODO: should the be an offset for the memory
-                          // location the fonts are loaded into?
+        chip8_fontset[i]; 
   }
 
   return out;
