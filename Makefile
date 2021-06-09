@@ -34,6 +34,7 @@ clean:
 format:
 	clang-format -i $(SRC_DIR)/*.c $(SRC_DIR)/*.h
 	clang-format -i $(TST_DIR)/*.c
+	black python/*.py
 
 fresh: clean format all test
 

@@ -2,3 +2,4 @@ bin/
 *.o
 *.swp
 python/__pycache__/
+*.pyc

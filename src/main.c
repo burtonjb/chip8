@@ -10,12 +10,9 @@
 #define WINDOW_WIDTH 1024
 #define WINDOW_HEIGHT 512
 
-key keyMap[KEYS] = {
-    SDLK_1, SDLK_2, SDLK_3, SDLK_4,
-    SDLK_q, SDLK_w, SDLK_e, SDLK_r,
-    SDLK_a, SDLK_s, SDLK_d, SDLK_f,
-    SDLK_z, SDLK_x, SDLK_c, SDLK_v
-};
+key keyMap[KEYS] = {SDLK_1, SDLK_2, SDLK_3, SDLK_4, SDLK_q, SDLK_w,
+                    SDLK_e, SDLK_r, SDLK_a, SDLK_s, SDLK_d, SDLK_f,
+                    SDLK_z, SDLK_x, SDLK_c, SDLK_v};
 
 void loadRom(Chip8 *chip8, int argc, char **argv) {
   if (argc != 2) {
@@ -32,7 +29,8 @@ void loadRom(Chip8 *chip8, int argc, char **argv) {
   long romSize = ftell(fp);
   rewind(fp);
 
-  unsigned char *romBuffer = (unsigned char *)malloc(sizeof(unsigned char) * romSize);
+  unsigned char *romBuffer =
+      (unsigned char *)malloc(sizeof(unsigned char) * romSize);
   if (romBuffer == NULL) {
     printf("Failed to allocate memory for ROM\n");
     exit(EXIT_FAILURE);
@@ -66,9 +64,9 @@ int main(int argc, char **argv) {
 
   // Initialize SDL
   SDL_Init(SDL_INIT_VIDEO);
-  SDL_Window *window = SDL_CreateWindow(
-      "CHIP-8 Emulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-      WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+  SDL_Window *window =
+      SDL_CreateWindow("CHIP-8 Emulator", SDL_WINDOWPOS_UNDEFINED,
+                       SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
   SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
   SDL_RenderSetLogicalSize(renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
   SDL_Texture *sdlTexture = SDL_CreateTexture(

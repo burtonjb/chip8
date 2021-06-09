@@ -12,7 +12,7 @@
 #define GRAPHICS_WIDTH 64
 #define GRAPHICS_HEIGHT 32
 
-#define SLEEP_TIME_MS 16 //Refresh at 60 times/second
+#define SLEEP_TIME_MS 16 // Refresh at 60 times/second
 
 #define MEM_START 0x00
 #define INTERPRETER_END 0x1FF
