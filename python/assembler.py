@@ -1,68 +1,51 @@
+#!/usr/bin/env python3
+
 # usage: python3 disassembler.py ./PATH/TO/ROM
 
-import sys
+from lib import *
+import argparse
 
-UNDEFINED_OP_CODE = "ERR!"
-CALL_MACHINE_CODE = "CMC"
-CLEAR_SCREEN = "CLS"
-RETURN_FROM_FUNCTION = "RTN"
-JUMP_TO_ADDRESS = "JMP"
-CALL_FUNCTION = "CSR"
-SKIP_NEXT_IF_EQUALS = "BEQ"
-SKIP_NEXT_IF_NOT_EQUALS = "BNE"
-SKIP_IF_REG_X_EQ_REG_Y = "BRE"
+parser = argparse.ArgumentParser(description="disassemble chip8 binaries into asm")
+parser.add_argument("--file", type=str, help="[required] file path", required=True)
+parser.add_argument("-old_asm", help="output the original asm", action="store_true")
+parser.add_argument("-new_asm", help="output the asm after parsing", action="store_true")
+parser.add_argument("-op", help="output the op codes after parsing", action="store_true")
+parser.add_argument("--output", type=str, help="filepath for the output parsed binary")
+
+args = parser.parse_args()
 
 # formats the output for printing
-def format_output(op_code):
-    return "{}".format(op_code.to_bytes(2, byteorder="big").hex())
-
-
-# returns the op-code for the assembly instruction and args
-def encode_op_code(instruction, args):
-    if instruction == CALL_MACHINE_CODE:
-        return 0x0000 ^ args[0]
-    elif instruction == CLEAR_SCREEN:
-        return 0x00E0
-    elif instruction == RETURN_FROM_FUNCTION:
-        return 0x00EE
-    elif instruction == JUMP_TO_ADDRESS:
-        return 0x1000 ^ args[0]
-    elif instruction == CALL_FUNCTION:
-        return 0x2000 ^ args[0]
-    elif instruction == SKIP_NEXT_IF_EQUALS:
-        return 0x3000 ^ (args[0] << 12) ^ (args[1])
-    elif instruction == SKIP_NEXT_IF_NOT_EQUALS:
-        return 0x4000 ^ (args[0] << 12) ^ (args[1])
-    elif instruction == SKIP_IF_REG_X_EQ_REG_Y:
-        return 0x5000 ^ (args[0] << 12) ^ (args[1] << 8)
-    return 0xFFFF
+def format_output(instruction):
+    if instruction is None:
+        return None
+    out = ""
+    if args.old_asm:
+        out += str(instruction._asm) + "\t"
+    if args.new_asm:
+        out += str(instruction.asm) + "\t"
+    if args.op:
+        out += hex(instruction.op_code) + "\t"
+    return out.strip()
 
 
 def main():
-    with open(sys.argv[1], "rw") as f:
+    out = None
+    if args.output:
+        out = open(args.output, "wb")
+    with open(args.file, "r") as f:
         line = "placeholder"
         while line:
-            line = f.readline().split("\t")
-            mnenomic, args = line[0], line[1:]
-            print(format_output(op_code, mnenomic, args))
-            # handle end-of-file, output total size or something
-
-
-def test_encoding():
-    instructions = [
-        ("CMC", [0x222]),
-        ("CLS", []),
-        ("RTN", []),
-        ("JMP", [0x123]),
-        ("CSR", [0x234]),
-        ("BEQ", [0xA, 0xFF]),
-        ("BNE", [0xB, 0xFE]),
-        ("BRE", [0x1, 0x2]),
-    ]
-    for inst, args in instructions:
-        print(format_output(encode_op_code(inst, args)))
+            line = f.readline()
+            if len(line) > 0:  # skip empty or short lines
+                line = line.strip()
+                instruction = parse_asm(line)
+                print(format_output(instruction))
+                if out:
+                    out.write(instruction.op_code.to_bytes(2, byteorder="big"))
+        if out:
+            # out.write(b"\x00")
+            out.close()
 
 
 if __name__ == "__main__":
-    test_encoding()
-    # main()
+    main()

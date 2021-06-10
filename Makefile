@@ -34,10 +34,11 @@ clean:
 format:
 	clang-format -i $(SRC_DIR)/*.c $(SRC_DIR)/*.h
 	clang-format -i $(TST_DIR)/*.c
-	black python/*.py
+	black python/*.py --line-length 120
 
 fresh: clean format all test
 
 # TODO: clean up this target eventually
 test:
 	 gcc -std=c11 tst/test_chip8.c src/chip8.c -o bin/tst/chip8 && ./bin/tst/chip8
+	 python3 python/test.py
