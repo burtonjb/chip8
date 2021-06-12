@@ -78,6 +78,38 @@ Chip-8 provides 2 timers, a delay timer and a sound timer. Their frequency is bo
 # How to use
 chip8 /PATH/TO/ROM
 
+# 2021 update
+I ended up adding a really simple disassembler and assembler to this project. I wrote them in python insead of C for two reasons:
+1. Python is an OOP language and I wanted to do some OOP design
+2. String manipulation in C is hard, its easy in python
+
+They can be run by running, with more options available by passing in '-h' as an argument.
+
+```
+python3 python/disassembler.py --file ./roms/PUZZLE -new_op -old_op -asm
+python3 python/assembler.py --file ./bin/asm/PUZZLE.asm -op -new_asm -old_asm
+```
+
+Additionally, instead of learning my poorly spec'd asm instruction set, you can also write code in 
+the slightly too verbose python DSL like language I created. See the test cases for more details, but you can do something like:
+
+```
+f = open(SOME_FILE, 'wb')
+instructions = [
+    CallNativeCode(Address(0x222)),
+    ClearScreen(),
+    JumpToAddress(Address(0x200)),
+]
+for i in instructions:
+  f.write(i.op_code)
+f.close()
+```
+
+### For the design of the assembler/disassembler:
+I used some kind of pattern-matching like technique, mapping them back to the instruction "sum type/class".
+Not super complicated if you're familiar with this FP pattern, but required a couple tries to get all the APIs
+working the way I wanted. 
+
 # sources
 * https://en.wikipedia.org/wiki/CHIP-8
 * http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
